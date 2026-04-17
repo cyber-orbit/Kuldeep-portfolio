@@ -283,7 +283,7 @@ termInput.addEventListener('keydown', e => {
   appendTermLine(raw, response);
 });
 
-/* ---- CONTACT FORM ---- */
+/* ---- CONTACT FORM (FIXED) ---- */
 const form       = document.getElementById('contactForm');
 const formStatus = document.getElementById('formStatus');
 
@@ -291,21 +291,50 @@ form && form.addEventListener('submit', async e => {
   e.preventDefault();
   formStatus.textContent = 'Sending...';
   formStatus.style.color = 'var(--neon-cyan)';
+  
   try {
+    // Create form data
+    const formData = new FormData(form);
+    
+    // Send to Formspree using proper CORS-safe method
     const res = await fetch(form.action, {
       method: 'POST',
-      body: new FormData(form),
-      headers: { 'Accept': 'application/json' },
+      body: formData,
+      // REMOVED problematic headers - let browser handle it naturally
     });
-    if (res.ok) {
-      formStatus.textContent = '✓ Message sent successfully!';
+    
+    // Check if response is successful (2xx status)
+    if (res.ok || res.status === 200 || res.status === 302) {
+      formStatus.textContent = '✓ Message sent successfully! Thank you.';
       formStatus.style.color = 'var(--neon-green)';
       form.reset();
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        formStatus.textContent = '';
+      }, 5000);
     } else {
-      throw new Error('Server error');
+      // If status is not ok, check for JSON response
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await res.json();
+        if (data.ok) {
+          formStatus.textContent = '✓ Message sent successfully! Thank you.';
+          formStatus.style.color = 'var(--neon-green)';
+          form.reset();
+          setTimeout(() => {
+            formStatus.textContent = '';
+          }, 5000);
+        } else {
+          throw new Error(data.error || 'Form submission failed');
+        }
+      } else {
+        throw new Error(`Server error: ${res.status}`);
+      }
     }
-  } catch {
-    formStatus.textContent = '✗ Failed to send. Email directly: ks8124708@gmail.com';
+  } catch (error) {
+    console.error('Form submission error:', error);
+    formStatus.innerHTML = '✗ Failed to send via form. <a href="mailto:ks8124708@gmail.com" style="color: var(--neon-cyan); text-decoration: underline;">Email directly</a>';
     formStatus.style.color = 'var(--neon-red)';
   }
 });
