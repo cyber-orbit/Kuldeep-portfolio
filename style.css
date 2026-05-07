@@ -945,3 +945,52 @@ img { max-width: 100%; }
   background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, transparent 70%);
   pointer-events: none;
 }
+
+/* ---- GDG ON CAMPUS ACHIEVEMENT ---- */
+.gdg-badge {
+  background: linear-gradient(135deg, #4285F4, #34A853, #FBBC05, #EA4335);
+  color: #fff;
+}
+.gdg-color {
+  background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+.gdg-glow {
+  background: radial-gradient(circle, rgba(66,133,244,0.12) 0%, transparent 70%) !important;
+}
+.gdg-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.gdg-pill {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  border: 1px solid currentColor;
+  opacity: 0.9;
+}
+.gdg-card {
+  border-color: rgba(66,133,244,0.3);
+}
+.gdg-card:hover {
+  border-color: rgba(66,133,244,0.7);
+  box-shadow: 0 0 20px rgba(66,133,244,0.15);
+}
+
+.gdg-btn {
+  margin-bottom: 0.8rem;
+  border-color: #4285F4;
+  color: #4285F4;
+}
+.gdg-btn:hover {
+  background: rgba(66,133,244,0.15);
+  color: #4285F4;
+  box-shadow: 0 0 12px rgba(66,133,244,0.3);
+}
